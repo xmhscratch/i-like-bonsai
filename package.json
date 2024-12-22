@@ -1,6 +1,6 @@
 {
   "name": "i-like-bonsai",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.js",
 	"keywords": [
 		"sql",
@@ -34,7 +34,8 @@
     "url-loader": "^4.1.1"
   },
   "peerDependencies": {
-    "webpack": "^5.97.1"
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
   },
   "devDependencies": {
     "circular-dependency-plugin": "^5.2.2",
@@ -44,6 +45,7 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.7.2",
     "url-parse": "^1.5.10",
+    "webpack": "^5.97.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^6.0.1",
     "webpack-dev-middleware": "^7.4.2",
