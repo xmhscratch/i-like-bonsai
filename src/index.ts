@@ -14,11 +14,11 @@ async function __construct() {
 
 export default async (rootNodeId?: string, data?: object) => {
     const tree = new Tree(rootNodeId)
-    await tree
-        .initialize()
-        .catch(console.error)
 
-    return tree.import(data)
+    await tree.initialize().catch(console.error)
+    await tree.import(data).catch(console.error)
+
+    return tree
 }
 
 __construct()

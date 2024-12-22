@@ -26,6 +26,8 @@ import toLinearList from './tree/to-linear-list'
 import getPrevNode from './tree/get-prev-node'
 import getNodeByParentIndex from './tree/get-node-parent-index'
 
+const _generateID = () => ObjectID().toHexString()
+
 export default class Tree {
 
     static MODIFIER_FUNCTIONS = ['create', 'import', 'moveTo', 'delete']
@@ -55,10 +57,14 @@ export default class Tree {
         return this
     }
 
+    static getNewID() {
+        return _generateID()
+    }
+
     async initialize() {
         let { rootId } = this
         if (isEmpty(rootId)) {
-            rootId = ObjectID().toHexString()
+            rootId = _generateID()
             this.rootId = rootId
         }
 

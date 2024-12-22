@@ -1,4 +1,4 @@
-Manipulating hierarchical BST tree structures
+Manipulating hierarchical BST tree
 
 ## Installation
 
@@ -8,17 +8,19 @@ npm install i-like-bonsai
 
 ## Usage
 
-instantiate
+Instantiate
 ----------
 ```javascript
 import bonsai from 'i-like-bonsai'
-const tree = bonsai(rootNodeId)
+const tree = await bonsai(rootNodeId)
+// or
+bonsai(rootNodeId).then((tree) => { /**/ })
 ```
 
-Generate new ID
+Generate node ID
 ----------
 ```javascript
-const nodeId = bonsai.newID()
+const nodeId = bonsai.getNewID()
 ```
 
 Node object structural
@@ -75,7 +77,7 @@ tree.import(nodeCollection)
 moveTo
 ----------
 ```javascript
-tree.moveTo(nodeId, parentId, adjacentId?)
+tree.moveTo(nodeId, parentId, adjacentId)
 ```
 [Back to TOC](#api-references)
 
