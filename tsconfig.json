@@ -1,0 +1,31 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"allowJs": true,
+		"baseUrl": "./src",
+		"declaration": false,
+		"module": "ES2020",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"outDir": "./dist/out-tsc",
+		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"sourceMap": true,
+		"target": "ES2020",
+		"lib": ["ES2020", "DOM"],
+		"typeRoots": ["./node_modules/@types"],
+		"types": [
+			"node",
+			"lodash-es"
+		]
+	},
+	"include": [
+		"./src/**/*.ts",
+		"./src/**/*.tsx",
+		"./src/**/*.js",
+		"./src/**/*.jsx",
+		"./src/**/*.d.ts"
+	]
+}
