@@ -14,7 +14,7 @@ import createNode from './tree/create'
 import getNode from './tree/get-node'
 import getLevel from './tree/get-level'
 import getDepth from './tree/get-depth'
-import getIndexNumber from './tree/get-index-number'
+import getIndexOf from './tree/get-index-of'
 import getChildren from './tree/get-children'
 import getDescendants from './tree/get-descendants'
 import countChilds from './tree/count-childs'
@@ -37,7 +37,7 @@ export default class Tree {
     //     'getPaths',
     //     'getLevel',
     //     'getDepth',
-    //     'getIndexNumber',
+    //     'getIndexOf',
     //     'getChildren',
     //     'getDescendants',
     //     'countChilds',
@@ -101,7 +101,7 @@ export default class Tree {
     getPaths = (...args) => this.memoize('getPaths', getPaths(this), args)
     getLevel = (...args) => this.memoize('getLevel', getLevel(this), args)
     getDepth = (...args) => this.memoize('getDepth', getDepth(this), args)
-    getIndexNumber = (...args) => this.memoize('getIndexNumber', getIndexNumber(this), args)
+    getIndexOf = (...args) => this.memoize('getIndexOf', getIndexOf(this), args)
     getChildren = (...args) => this.memoize('getChildren', getChildren(this), args)
     getDescendants = (...args) => this.memoize('getDescendants', getDescendants(this), args)
     countChilds = (...args) => this.memoize('countChilds', countChilds(this), args)

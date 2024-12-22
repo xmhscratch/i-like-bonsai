@@ -8,11 +8,30 @@ npm install i-like-bonsai
 
 ## Usage
 
+instantiate
+----------
 ```javascript
 import bonsai from 'i-like-bonsai'
-
-// const nodeId = Tree.newNodeID()
 const tree = bonsai(rootNodeId)
+```
+
+Generate new ID
+----------
+```javascript
+const nodeId = bonsai.newID()
+```
+
+Node object structural
+----------
+```javascript
+{
+  id varchar(24) NOT NULL,
+  root varchar(24) NOT NULL,
+  parent varchar(24),
+  left int(11) NOT NULL,
+  right int(11) NOT NULL,
+  level int(11) NOT NULL
+}
 ```
 
 API References
@@ -42,137 +61,122 @@ API References
 create
 ----------
 ```javascript
-const { nodeId } = tree.create()
+const { nodeId } = tree.create(parentId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 import
 ----------
 ```javascript
-const { nodeId } = tree.import()
+tree.import(nodeCollection)
 ```
-lorem
 [Back to TOC](#api-references)
 
 moveTo
 ----------
 ```javascript
-const { nodeId } = tree.moveTo()
+tree.moveTo(nodeId, parentId, adjacentId?)
 ```
-lorem
 [Back to TOC](#api-references)
 
 delete
 ----------
 ```javascript
-const { nodeId } = tree.delete()
+const errMsg = tree.delete(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getNode
 ----------
 ```javascript
-const { nodeId } = tree.getNode()
+const node = tree.getNode(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getRootNode
 ----------
 ```javascript
-const { nodeId } = tree.getRootNode()
+const node = tree.getRootNode()
 ```
-lorem
 [Back to TOC](#api-references)
 
 getPrevNode
 ----------
 ```javascript
-const { nodeId } = tree.getPrevNode()
+const node = tree.getPrevNode(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getNodeByParentIndex
 ----------
 ```javascript
-const { nodeId } = tree.getNodeByParentIndex()
+const { nodeId } = tree.getNodeByParentIndex(parentId, parentIndex)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getPaths
 ----------
 ```javascript
-const { nodeId } = tree.getPaths()
+const nodeCollection = tree.getPaths(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getLevel
 ----------
 ```javascript
-const { nodeId } = tree.getLevel()
+const level = tree.getLevel(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getDepth
 ----------
 ```javascript
-const { nodeId } = tree.getDepth()
+const depth = tree.getDepth(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getIndexNumber
 ----------
 ```javascript
-const { nodeId } = tree.getIndexNumber()
+const nodeIndex = tree.getIndexOf(nodeId)
 ```
-lorem
+nodeIndex -1 on none exist
 [Back to TOC](#api-references)
 
 getChildren
 ----------
 ```javascript
-const { nodeId } = tree.getChildren()
+const nodeCollection = tree.getChildren(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 getDescendants
 ----------
 ```javascript
-const { nodeId } = tree.getDescendants()
+const nodeCollection = tree.getDescendants(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 countChilds
 ----------
 ```javascript
-const { nodeId } = tree.countChilds()
+const count = tree.countChilds(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 toAdjacencyList
 ----------
 ```javascript
-const { nodeId } = tree.toAdjacencyList()
+const nestedNode = tree.toAdjacencyList(nodeId)
+const childNodeCollection = nestedNode.children
 ```
-lorem
 [Back to TOC](#api-references)
 
 toLinearList
 ----------
 ```javascript
-const { nodeId } = tree.toLinearList()
+const nodeCollection = tree.toLinearList(nodeId)
 ```
-lorem
 [Back to TOC](#api-references)
 
 ## Contributing

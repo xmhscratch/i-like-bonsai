@@ -33,7 +33,7 @@ export default (context) => {
         stmt.free()
 
         if (!memo.nodeId) {
-            return t(`Node ${memo.nodeId} doesnt exist`)
+            return `Node ${memo.nodeId} does not exist`
         }
 
         const targetNodes = context.getDescendants(memo.nodeId)
