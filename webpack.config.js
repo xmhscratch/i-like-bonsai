@@ -67,7 +67,7 @@ export default smp.wrap({
         // "sourceMapFilename": "[file].map[query]",
         "crossOriginLoading": "anonymous",
         "pathinfo": false,
-        // "globalObject": "global"
+        // "globalObject": "globalThis"
     },
     ...isProduction ? {
         "performance": {

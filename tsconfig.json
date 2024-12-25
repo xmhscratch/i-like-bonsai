@@ -8,7 +8,7 @@
 		"module": "ES2020",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"outDir": "./dist/out-tsc",
+		"outDir": "./dist",
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
@@ -16,10 +16,7 @@
 		"target": "ES2020",
 		"lib": ["ES2020", "DOM"],
 		"typeRoots": ["./node_modules/@types"],
-		"types": [
-			"node",
-			"lodash-es"
-		]
+		"types": ["node", "lodash-es"]
 	},
 	"include": [
 		"./src/**/*.ts",

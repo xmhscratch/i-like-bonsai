@@ -128,7 +128,7 @@ class Tree {
         if ((new RegExp(`^(${join(Tree.MODIFIER_FUNCTIONS, '|')})$`, 'g')).test(fnName)) {
             forEach(this._memoizer, (v, k) => {
                 if (has(this._memoizer, k)) {
-                    this._memoizer[k].cache.clear()
+                    (<any>this._memoizer[k]).cache.clear()
                 }
             })
             fnResult = origFn.apply(this, fnArgs)
