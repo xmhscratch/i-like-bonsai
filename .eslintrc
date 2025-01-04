@@ -29,6 +29,7 @@
         "jquery": false, // jquery global variables.
         "prototypejs": false, // prototypejs global variables.
         "shelljs": false, // shelljs global variables.
+        "jest/globals": true
     },
 
     "globals": {
@@ -36,12 +37,17 @@
     },
 
     "plugins": [
-        "react",
-        "react-hooks"
+        "jest"
         // e.g. "react" (must run `npm install eslint-plugin-react` first)
     ],
 
     "rules": {
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error",
+
         "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
         "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
 

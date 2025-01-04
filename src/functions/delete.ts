@@ -5,15 +5,28 @@ import {
     map,
     forEach,
 } from 'lodash-es'
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
 
-export default (context) => {
-    return (nodeId) => {
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId): TreeFuncResult => {
         const { db } = context
 
-        let stmt
-        let memo = {}
+        let stmt: Statement
+        let memo: {
+            nodeId: String,
+            nodeLeft?: Number,
+            nodeRight?: Number,
+            rootId?: String,
+            nodeWidth?: Number,
+        } = { nodeId }
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             SELECT
                 node.id AS nodeId,
                 node.root AS rootId,
@@ -28,7 +41,7 @@ export default (context) => {
             );
         `)
         memo = extend({}, memo,
-            pickBy(stmt.getAsObject({ $nodeId: nodeId }), identity)
+            pickBy(stmt.getAsObject(<BindParams>{ $nodeId: <SqlValue>nodeId }), identity)
         )
         stmt.free()
 
@@ -39,32 +52,32 @@ export default (context) => {
         const targetNodes = context.getDescendants(memo.nodeId)
         memo = extend({}, memo, { targetNodes })
 
-        const nodeIds = map(targetNodes, 'id')
+        const nodeIds = map(targetNodes as Array<Object>, 'id')
 
-        forEach(nodeIds, ($nodeId) => {
-            stmt = db.prepare(`
+        forEach(nodeIds, ($nodeId: SqlValue) => {
+            stmt = (<Database>db).prepare(`
                 DELETE FROM nodes
                 WHERE id = $nodeId;
             `)
-            stmt.run({ $nodeId })
+            stmt.run(<BindParams>{ $nodeId })
             stmt.free()
         })
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             DELETE FROM nodes
             WHERE (
                 left BETWEEN $nodeLeft AND $nodeRight
             )
             AND root = $rootId;
         `)
-        stmt.run({
-            $nodeLeft: memo.nodeLeft,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeLeft:  <SqlValue>memo.nodeLeft,
+            $nodeRight: <SqlValue>memo.nodeRight,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE
                 nodes
             SET
@@ -72,14 +85,14 @@ export default (context) => {
             WHERE left > $nodeRight
                 AND root = $rootId;
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId,
+        stmt.run(<BindParams>{
+            $nodeWidth: <SqlValue>memo.nodeWidth,
+            $nodeRight: <SqlValue>memo.nodeRight,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE
                 nodes
             SET
@@ -87,10 +100,10 @@ export default (context) => {
             WHERE right > $nodeRight
                 AND root = $rootId;
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId,
+        stmt.run(<BindParams>{
+            $nodeWidth: <SqlValue>memo.nodeWidth,
+            $nodeRight: <SqlValue>memo.nodeRight,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 

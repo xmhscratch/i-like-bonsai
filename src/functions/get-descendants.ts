@@ -1,8 +1,16 @@
-export default (context) => {
-    return (nodeId) => {
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
+
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId: String): TreeFuncResult => {
         const { db, rootId } = context
 
-        let stmt = db.prepare(`
+        let stmt: Statement = (<Database>db).prepare(`
             SELECT
                 node.*
             FROM
@@ -16,9 +24,9 @@ export default (context) => {
                 AND node.root = $rootId
             ORDER BY node.left;
         `)
-        stmt.bind({
-            $nodeId: nodeId,
-            $rootId: rootId,
+        stmt.bind(<BindParams>{
+            $nodeId: <SqlValue>nodeId,
+            $rootId: <SqlValue>rootId,
         })
 
         let results = []

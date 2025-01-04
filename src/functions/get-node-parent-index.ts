@@ -1,8 +1,16 @@
-export default (context) => {
-    return (parentId, parentIndex) => {
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
+
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (parentId: String, parentIndex: Number): TreeFuncResult => {
         const { db, rootId } = context
 
-        let stmt = db.prepare(`
+        let stmt: Statement = (<Database>db).prepare(`
             SELECT
                 node.*,
                 (
@@ -25,10 +33,10 @@ export default (context) => {
             )
             LIMIT 1;
         `)
-        let results = stmt.getAsObject({
-            $rootId: rootId,
-            $parentId: parentId,
-            $parentIndex: parentIndex,
+        let results = stmt.getAsObject(<BindParams>{
+            $rootId:        <SqlValue>rootId,
+            $parentId:      <SqlValue>parentId,
+            $parentIndex:   <SqlValue>parentIndex,
         })
         stmt.free()
 

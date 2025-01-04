@@ -1,10 +1,17 @@
 import { isEmpty } from 'lodash-es'
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
 
-export default (context) => {
-    return (nodeId) => {
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId: String): TreeFuncResult => {
         const { db } = context
 
-        let stmt = db.prepare(`
+        let stmt: Statement = (<Database>db).prepare(`
             SELECT
                 node.id,
                 (COUNT(parent.id) - 1) AS level
@@ -18,7 +25,7 @@ export default (context) => {
             )
             GROUP BY node.id;
         `)
-        let results = stmt.getAsObject({ $nodeId: nodeId })
+        let results = stmt.getAsObject(<BindParams>{ $nodeId: <SqlValue>nodeId })
         stmt.free()
 
         return !isEmpty(results) ? results.level : 0

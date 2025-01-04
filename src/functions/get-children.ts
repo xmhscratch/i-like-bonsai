@@ -2,14 +2,24 @@ import {
     extend,
     omit,
 } from 'lodash-es'
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
 
-export default (context) => {
-    return (nodeId) => {
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId: String): TreeFuncResult => {
         const { db } = context
 
-        let memo = { nodeId }
+        let memo: {
+            nodeId: String,
+            rootId?: String,
+        } = { nodeId }
 
-        let stmt = db.prepare(`
+        let stmt: Statement = (<Database>db).prepare(`
             SELECT
                 node.root AS rootId
             FROM
@@ -17,12 +27,12 @@ export default (context) => {
             WHERE node.id = $nodeId
             LIMIT 1;
         `)
-        memo = extend({}, memo, stmt.getAsObject({
-            $nodeId: memo.nodeId
+        memo = extend({}, memo, stmt.getAsObject(<BindParams>{
+            $nodeId: <SqlValue>memo.nodeId,
         }))
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             SELECT
                 node.*
             FROM
@@ -33,9 +43,9 @@ export default (context) => {
             )
             ORDER BY node.left;
         `)
-        stmt.bind({
-            $rootId: memo.rootId,
-            $parentId: memo.nodeId,
+        stmt.bind(<BindParams>{
+            $rootId:    <SqlValue>memo.rootId,
+            $parentId:  <SqlValue>memo.nodeId,
         })
 
         let results = []
@@ -49,7 +59,7 @@ export default (context) => {
     }
 }
 
-// stmt = db.prepare(`
+// stmt = (<Database>db).prepare(`
 //     SELECT
 //         node.*,
 //         (

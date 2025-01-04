@@ -2,19 +2,39 @@ import {
     extend,
     isEqual,
 } from 'lodash-es'
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
 
-export default (context) => {
-    return (nodeId, parentId, adjacentId = null) => {
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId: String, parentId: String, adjacentId?: String): TreeFuncResult => {
         const { db } = context
 
-        let stmt
-        let memo = { nodeId, parentId, adjacentId }
+        let stmt: Statement
+        let memo: {
+            nodeId: String,
+            parentId: String,
+            rootId?: String,
+            parentRight?: Number,
+            nodeLevel?: Number,
+            adjacentId?: String,
+            parentLevel?: Number,
+            newPosition?: Number,
+            parentLeft?: Number,
+            nodeLeft?: Number,
+            nodeRight?: Number,
+            nodeWidth?: Number,
+        } = { nodeId, parentId, adjacentId }
 
         if (isEqual(nodeId, parentId)) {
             return true
         }
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             SELECT
                 node.root AS rootId,
                 node.left AS nodeLeft,
@@ -26,12 +46,12 @@ export default (context) => {
             WHERE node.id = $nodeId
             LIMIT 1;
         `)
-        memo = extend({}, memo, stmt.getAsObject({
-            $nodeId: memo.nodeId
+        memo = extend({}, memo, stmt.getAsObject(<BindParams>{
+            $nodeId: <SqlValue>memo.nodeId,
         }))
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             SELECT
                 node.left AS parentLeft,
                 node.right AS parentRight,
@@ -44,14 +64,14 @@ export default (context) => {
             )
             LIMIT 1;
         `)
-        memo = extend({}, memo, stmt.getAsObject({
-            $parentId: memo.parentId,
-            $rootId: memo.rootId
+        memo = extend({}, memo, stmt.getAsObject(<BindParams>{
+            $parentId:  <SqlValue>memo.parentId,
+            $rootId:    <SqlValue>memo.rootId
         }))
         stmt.free()
 
         if (adjacentId) {
-            stmt = db.prepare(`
+            stmt = (<Database>db).prepare(`
                 SELECT
                     parent.id AS adjacentId,
                     parent.left AS adjacentLeft,
@@ -68,10 +88,10 @@ export default (context) => {
                 )
                 LIMIT 1;
             `)
-            memo = extend({}, memo, stmt.getAsObject({
-                $parentLevel: memo.parentLevel,
-                $adjacentId: memo.adjacentId,
-                $rootId: memo.rootId
+            memo = extend({}, memo, stmt.getAsObject(<BindParams>{
+                $parentLevel:   <SqlValue>memo.parentLevel,
+                $adjacentId:    <SqlValue>memo.adjacentId,
+                $rootId:        <SqlValue>memo.rootId,
             }))
             stmt.free()
         }
@@ -80,7 +100,7 @@ export default (context) => {
             memo.newPosition = memo.parentLeft
         }
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET
                 left = 0 - left,
@@ -91,14 +111,14 @@ export default (context) => {
                 AND root = $rootId
             );
         `)
-        stmt.run({
-            $nodeLeft: memo.nodeLeft,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeLeft:  <SqlValue>memo.nodeLeft,
+            $nodeRight: <SqlValue>memo.nodeRight,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET left = left - $nodeWidth
             WHERE (
@@ -106,14 +126,14 @@ export default (context) => {
                 AND root = $rootId
             );
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeWidth: <SqlValue>memo.nodeWidth,
+            $nodeRight: <SqlValue>memo.nodeRight,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET right = right - $nodeWidth
             WHERE (
@@ -121,14 +141,14 @@ export default (context) => {
                 AND root = $rootId
             );
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeWidth: <SqlValue>memo.nodeWidth,
+            $nodeRight: <SqlValue>memo.nodeRight,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET left = left + $nodeWidth
             WHERE (
@@ -139,15 +159,15 @@ export default (context) => {
             )
             AND root = $rootId;
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $newPosition: memo.newPosition,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeWidth:     <SqlValue>memo.nodeWidth,
+            $newPosition:   <SqlValue>memo.newPosition,
+            $nodeRight:     <SqlValue>memo.nodeRight,
+            $rootId:        <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET right = right + $nodeWidth
             WHERE (
@@ -158,15 +178,15 @@ export default (context) => {
             )
             AND root = $rootId;
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $newPosition: memo.newPosition,
-            $nodeRight: memo.nodeRight,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeWidth:     <SqlValue>memo.nodeWidth,
+            $newPosition:   <SqlValue>memo.newPosition,
+            $nodeRight:     <SqlValue>memo.nodeRight,
+            $rootId:        <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET
                 left = CASE WHEN $newPosition > $nodeRight
@@ -182,27 +202,27 @@ export default (context) => {
                 AND right >= 0 - $nodeRight
                 AND root = $rootId;
         `)
-        stmt.run({
-            $nodeWidth: memo.nodeWidth,
-            $newPosition: memo.newPosition,
-            $nodeLeft: memo.nodeLeft,
-            $nodeRight: memo.nodeRight,
-            $parentLevel: memo.parentLevel,
-            $nodeLevel: memo.nodeLevel,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $nodeWidth:     <SqlValue>memo.nodeWidth,
+            $newPosition:   <SqlValue>memo.newPosition,
+            $nodeLeft:      <SqlValue>memo.nodeLeft,
+            $nodeRight:     <SqlValue>memo.nodeRight,
+            $parentLevel:   <SqlValue>memo.parentLevel,
+            $nodeLevel:     <SqlValue>memo.nodeLevel,
+            $rootId:        <SqlValue>memo.rootId,
         })
         stmt.free()
 
-        stmt = db.prepare(`
+        stmt = (<Database>db).prepare(`
             UPDATE nodes
             SET parent = $parentId
             WHERE id = $nodeId
                 AND root = $rootId;
         `)
-        stmt.run({
-            $parentId: memo.parentId,
-            $nodeId: memo.nodeId,
-            $rootId: memo.rootId
+        stmt.run(<BindParams>{
+            $parentId:  <SqlValue>memo.parentId,
+            $nodeId:    <SqlValue>memo.nodeId,
+            $rootId:    <SqlValue>memo.rootId,
         })
         stmt.free()
 

@@ -1,0 +1,19 @@
+{
+    "bail": 1,
+    "verbose": true,
+    "testMatch": ["**/*.test.js"],
+    "transform": {
+        "^.+\\.[tj]sx?$": ["ts-jest", {
+            "tsconfig": "./tsconfig.json",
+            "useESM": true
+        }]
+    },
+    "extensionsToTreatAsEsm": [".ts", ".mts"],
+    "moduleFileExtensions": ["ts", "mjs", "js"],
+    "moduleNameMapper": {
+        "(.*)\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/$1.$2",
+        "(.*)\\.wasm": "<rootDir>/dist/$1.wasm"
+    },
+    "transformIgnorePatterns": ["/node_modules/"],
+    "setupFilesAfterEnv": ["<rootDir>/setup-jest.js"]
+}

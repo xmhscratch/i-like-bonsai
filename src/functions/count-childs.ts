@@ -1,10 +1,17 @@
 import { isEmpty } from 'lodash-es'
+import { Database, ParamsObject, BindParams, SqlValue } from 'sql.js'
 
-export default (context) => {
-    return (nodeId) => {
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId: String): TreeFuncResult => {
         const { db, rootId } = context
 
-        let stmt = db.prepare(`
+        let stmt = (<Database>db).prepare(`
             SELECT
                 COUNT(*) AS count
             FROM
@@ -28,9 +35,9 @@ export default (context) => {
             )
             LIMIT 1;
         `)
-        let results = stmt.getAsObject({
-            $nodeId: nodeId,
-            $rootId: rootId,
+        let results = <ParamsObject>stmt.getAsObject(<BindParams>{
+            $nodeId: <SqlValue>nodeId,
+            $rootId: <SqlValue>rootId,
         })
         stmt.free()
 

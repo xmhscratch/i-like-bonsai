@@ -1,10 +1,17 @@
 import { isEmpty } from 'lodash-es'
+import { Database, BindParams, SqlValue, Statement } from 'sql.js'
 
-export default (context) => {
-    return (nodeId) => {
+import {
+    TreeInterface,
+    TreeFuncContext,
+    TreeFuncResult,
+} from '../tree.d'
+
+export default (context: TreeInterface): TreeFuncContext => {
+    return (nodeId: String): TreeFuncResult => {
         const { db, rootId } = context
 
-        let stmt = db.prepare(`
+        let stmt: Statement = (<Database>db).prepare(`
             SELECT
                 node.id,
                 MAX(node.level - parent.level) AS depth
@@ -19,9 +26,9 @@ export default (context) => {
                 AND node.root = $rootId
             ORDER BY node.left;
         `)
-        let results = stmt.getAsObject({
-            $nodeId: nodeId,
-            $rootId: rootId
+        let results = stmt.getAsObject(<BindParams>{
+            $nodeId: <SqlValue>nodeId,
+            $rootId: <SqlValue>rootId,
         })
         stmt.free()
 

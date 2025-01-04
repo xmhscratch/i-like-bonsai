@@ -3,8 +3,9 @@
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
 		"allowJs": true,
+		"allowArbitraryExtensions": true,
 		"baseUrl": "./src",
-		"declaration": false,
+		"declaration": true,
 		"module": "ES2020",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
@@ -15,8 +16,8 @@
 		"sourceMap": true,
 		"target": "ES2020",
 		"lib": ["ES2020", "DOM"],
-		"typeRoots": ["./node_modules/@types"],
-		"types": ["node", "lodash-es"]
+		"typeRoots": ["./node_modules/@types", "./src"],
+		"types": ["node", "lodash-es", "sql.js", "jest"]
 	},
 	"include": [
 		"./src/**/*.ts",
