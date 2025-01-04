@@ -19,6 +19,7 @@ export interface TreeInterface {
     _memoizer: Object
 
     initialize(SQLJS: SqlJsStatic)
+    destroy(): Promise<void>
 
     getNewID(): String
 

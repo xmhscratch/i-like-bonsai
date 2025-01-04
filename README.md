@@ -57,6 +57,7 @@ API References
   - [countChilds](#countchilds)
   - [toAdjacencyList](#toadjacencylist)
   - [toLinearList](#tolinearlist)
+  - [TODO](#todo)
   - [Contributing](#contributing)
   - [License](#license)
 
@@ -65,6 +66,7 @@ create
 ```javascript
 const { nodeId } = tree.create(parentId)
 ```
+Create new children node of `parentId`
 [Back to TOC](#api-references)
 
 import
@@ -72,6 +74,7 @@ import
 ```javascript
 tree.import(nodeCollection)
 ```
+Import plain array of node object into the tree.
 [Back to TOC](#api-references)
 
 moveTo
@@ -79,6 +82,7 @@ moveTo
 ```javascript
 tree.moveTo(nodeId, parentId, adjacentId)
 ```
+Moving the `nodeId` and all of its descendant to be children of `parentId`. Siblings position (ntn + 1) to the `adjacentId`
 [Back to TOC](#api-references)
 
 delete
@@ -86,6 +90,7 @@ delete
 ```javascript
 const errMsg = tree.delete(nodeId)
 ```
+Delete the node itself and all of its descendant.
 [Back to TOC](#api-references)
 
 getNode
@@ -93,6 +98,7 @@ getNode
 ```javascript
 const node = tree.getNode(nodeId)
 ```
+Get node with provided `nodeId`
 [Back to TOC](#api-references)
 
 getRootNode
@@ -100,6 +106,7 @@ getRootNode
 ```javascript
 const node = tree.getRootNode()
 ```
+Get node without a parent.
 [Back to TOC](#api-references)
 
 getPrevNode
@@ -107,6 +114,7 @@ getPrevNode
 ```javascript
 const node = tree.getPrevNode(nodeId)
 ```
+Get siblings node on (nth - 1) position.
 [Back to TOC](#api-references)
 
 getNodeByParentIndex
@@ -114,6 +122,7 @@ getNodeByParentIndex
 ```javascript
 const { nodeId } = tree.getNodeByParentIndex(parentId, parentIndex)
 ```
+Get node on nth position `parentIndex` by the `parentId` node.
 [Back to TOC](#api-references)
 
 getPaths
@@ -121,6 +130,7 @@ getPaths
 ```javascript
 const nodeCollection = tree.getPaths(nodeId)
 ```
+Returns trailing list of ancestor node belongs to `nodeId`
 [Back to TOC](#api-references)
 
 getLevel
@@ -128,6 +138,7 @@ getLevel
 ```javascript
 const level = tree.getLevel(nodeId)
 ```
+Count number of ancestor node above `nodeId`
 [Back to TOC](#api-references)
 
 getDepth
@@ -135,6 +146,7 @@ getDepth
 ```javascript
 const depth = tree.getDepth(nodeId)
 ```
+Count number of descendant node below `nodeId`
 [Back to TOC](#api-references)
 
 getIndexNumber
@@ -142,7 +154,7 @@ getIndexNumber
 ```javascript
 const nodeIndex = tree.getIndexOf(nodeId)
 ```
-nodeIndex -1 on none exist
+Get nth position of the `nodeId` against the whole tree. Returns -1 on none exists.
 [Back to TOC](#api-references)
 
 getChildren
@@ -150,6 +162,7 @@ getChildren
 ```javascript
 const nodeCollection = tree.getChildren(nodeId)
 ```
+Returns DIRECT descendant of the provided `nodeId` (no grandsons or whatsoever).
 [Back to TOC](#api-references)
 
 getDescendants
@@ -157,6 +170,7 @@ getDescendants
 ```javascript
 const nodeCollection = tree.getDescendants(nodeId)
 ```
+Listing descendant of the provided `nodeId`
 [Back to TOC](#api-references)
 
 countChilds
@@ -164,6 +178,7 @@ countChilds
 ```javascript
 const count = tree.countChilds(nodeId)
 ```
+Returns number of descendant are member of the provided `nodeId`
 [Back to TOC](#api-references)
 
 toAdjacencyList
@@ -172,6 +187,7 @@ toAdjacencyList
 const nestedNode = tree.toAdjacencyList(nodeId)
 const childNodeCollection = nestedNode.children
 ```
+Adjacency listing of the provided `nodeId`. Direct descendant access by the key `children`. Default empty `nodeId` is `rootId`
 [Back to TOC](#api-references)
 
 toLinearList
@@ -179,7 +195,11 @@ toLinearList
 ```javascript
 const nodeCollection = tree.toLinearList(nodeId)
 ```
+Listing all nodes in single linear array.
 [Back to TOC](#api-references)
+
+## TODO
+Covering unit test.
 
 ## Contributing
 

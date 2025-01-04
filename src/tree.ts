@@ -81,6 +81,10 @@ export class Tree implements TreeInterface {
         return this
     }
 
+    async destroy() {
+        return this.db.close()
+    }
+
     getNewID(): String {
         return getNewID()
     }

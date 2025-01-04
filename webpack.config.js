@@ -143,7 +143,15 @@ export default smp.wrap({
         "asyncWebAssembly": true,
     },
     "plugins": [
-        new HtmlWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            inject: false,
+            templateContent: ({ htmlWebpackPlugin }) => `
+                <html>
+                <head>${htmlWebpackPlugin.tags.headTags}</head>
+                <body>${htmlWebpackPlugin.tags.bodyTags}</body>
+                </html>
+            `,
+        }),
         new ForkTsCheckerWebpackPlugin({
             "typescript": {
                 "configFile": path.resolve(process.cwd(), "./tsconfig.json"),

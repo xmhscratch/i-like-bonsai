@@ -29,7 +29,5 @@ beforeEach(async () => {
     await tree.initialize(global.SQLJS)
     await tree.import(global.SAMPLE_TREE_DATA)
 
-    console.log(tree.toAdjacencyList())
-
     global.TREE = tree
 })
