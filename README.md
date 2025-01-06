@@ -51,7 +51,7 @@ API References
   - [getPaths](#getpaths)
   - [getLevel](#getlevel)
   - [getDepth](#getdepth)
-  - [getIndexNumber](#getindexnumber)
+  - [getIndexOf](#getindexof)
   - [getChildren](#getchildren)
   - [getDescendants](#getdescendants)
   - [countChilds](#countchilds)
@@ -149,7 +149,7 @@ const depth = tree.getDepth(nodeId)
 Count number of descendant node below `nodeId`
 [Back to TOC](#api-references)
 
-getIndexNumber
+getIndexOf
 ----------
 ```javascript
 const nodeIndex = tree.getIndexOf(nodeId)

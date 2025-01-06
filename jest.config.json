@@ -1,7 +1,7 @@
 {
     "bail": 1,
     "verbose": true,
-    "testMatch": ["**/*.test.js"],
+    "testMatch": ["**/*.test.js", "**/*.test.ts"],
     "transform": {
         "^.+\\.[tj]sx?$": ["ts-jest", {
             "tsconfig": "./tsconfig.json",

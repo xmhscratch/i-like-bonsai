@@ -111,8 +111,9 @@ export class Tree implements TreeInterface {
     memoize(fnName, origFn, fnArgs) {
         let fnResult
 
-        if (!has(this._memoizer, fnName)) {
-            this._memoizer[fnName] = memoize(origFn, (fnArgs) => !isEmpty(fnArgs) ? hashObject(fnArgs) : fnName)
+        const fnKeyGetter = (fnArgs) => !isEmpty(fnArgs) ? `${fnName}_${hashObject(fnArgs)}` : fnName
+        if (!has(this._memoizer, `${fnName}`)) {
+            this._memoizer[`${fnKeyGetter(fnArgs)}`] = memoize(origFn, fnKeyGetter.bind(this))
         }
 
         if ((new RegExp(`^(${join(Tree.MODIFIER_FUNCTIONS, '|')})$`, 'g')).test(fnName)) {
@@ -124,7 +125,7 @@ export class Tree implements TreeInterface {
             fnResult = origFn.apply(this, fnArgs)
         }
         else {
-            const memoFn = this._memoizer[fnName]
+            const memoFn = this._memoizer[`${fnKeyGetter(fnArgs)}`]
             fnResult = memoFn.apply(this, fnArgs)
         }
 

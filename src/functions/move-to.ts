@@ -1,8 +1,11 @@
 import {
     extend,
     isEqual,
+    toNumber,
+    toString,
 } from 'lodash-es'
 import { Database, BindParams, SqlValue, Statement } from 'sql.js'
+import ObjectID from 'bson-objectid'
 
 import {
     TreeInterface,
@@ -11,7 +14,7 @@ import {
 } from '../tree.d'
 
 export default (context: TreeInterface): TreeFuncContext => {
-    return (nodeId: String, parentId: String, adjacentId?: String): TreeFuncResult => {
+    return (nodeId: String, parentId: String, adjacentId?: String | Number): TreeFuncResult => {
         const { db } = context
 
         let stmt: Statement
@@ -28,7 +31,7 @@ export default (context: TreeInterface): TreeFuncContext => {
             nodeLeft?: Number,
             nodeRight?: Number,
             nodeWidth?: Number,
-        } = { nodeId, parentId, adjacentId }
+        } = { nodeId, parentId }
 
         if (isEqual(nodeId, parentId)) {
             return true
@@ -70,7 +73,7 @@ export default (context: TreeInterface): TreeFuncContext => {
         }))
         stmt.free()
 
-        if (adjacentId) {
+        if (ObjectID.isValid(toString(adjacentId))) {
             stmt = (<Database>db).prepare(`
                 SELECT
                     parent.id AS adjacentId,
@@ -97,7 +100,12 @@ export default (context: TreeInterface): TreeFuncContext => {
         }
 
         if (!memo.newPosition) {
-            memo.newPosition = memo.parentLeft
+            if (toNumber(adjacentId) < 0) {
+                memo.newPosition = memo.parentRight
+            }
+            else {
+                memo.newPosition = memo.parentLeft
+            }
         }
 
         stmt = (<Database>db).prepare(`

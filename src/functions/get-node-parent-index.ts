@@ -1,3 +1,4 @@
+import { get } from 'lodash-es'
 import { Database, BindParams, SqlValue, Statement } from 'sql.js'
 
 import {
@@ -40,6 +41,6 @@ export default (context: TreeInterface): TreeFuncContext => {
         })
         stmt.free()
 
-        return results
+        return get(results, 'id') ? results : {}
     }
 }
