@@ -1,0 +1,26 @@
+[
+    {
+        "id": "620244981c66ab7fbaac912a",
+        "root": "620244981c66ab7fbaac9122",
+        "parent": "620244981c66ab7fbaac9126",
+        "left": 3,
+        "right": 6,
+        "level": 2
+    },
+    {
+        "id": "620244981c66ab7fbaac9132",
+        "root": "620244981c66ab7fbaac9122",
+        "parent": "620244981c66ab7fbaac9126",
+        "left": 7,
+        "right": 10,
+        "level": 2
+    },
+    {
+        "id": "620244981c66ab7fbaac913a",
+        "root": "620244981c66ab7fbaac9122",
+        "parent": "620244981c66ab7fbaac9126",
+        "left": 11,
+        "right": 18,
+        "level": 2
+    }
+]
